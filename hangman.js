@@ -1,3 +1,16 @@
+var word_choices = [
+    "approval",
+    "artificial",
+    "banana",
+    "bandana",
+    "hello",
+    "subtract"
+];
+
+function random_choice(n) {
+    return Math.floor(Math.random() * n);
+}
+
 var word = "hello";
 var boardState = ["_", "_", "_", "_", "_"];
 
