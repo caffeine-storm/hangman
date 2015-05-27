@@ -3,6 +3,7 @@ var word_choices = [
     "artificial",
     "banana",
     "bandana",
+    "frog",
     "hello",
     "subtract"
 ];
@@ -150,6 +151,9 @@ function restartGame() {
 
     // Reset what keys have been guessed.
     keys_seen = [];
+    
+    // Reset the message to welcome the user back.
+    write_message("Welcome back to hangman!");
 
     // Update what the user sees.
     updateDisplay();
