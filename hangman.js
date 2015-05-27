@@ -25,18 +25,33 @@ function updateBoard() {
 	dom_board.innerHTML = board.join(" ");
 }
 
-function updateImages(img_num) {
+function setImage(image_name) {
 	var dom_img = document.getElementById("drawing");
-	dom_img.src = "img/" + img_num + ".png";
+	dom_img.src = image_name;
+}
+
+function updateImage(img_num) {
+    setImage("img/" + img_num + ".png");
+}
+
+function updateGuessCount(n) {
+    var dom_span = document.getElementById("guessesLeft");
+    dom_span.innerHTML = "" + n;
 }
 
 function updateDisplay() {
 	updateBoard();
-	updateImages(bad_guess_count);
+	updateImage(bad_guess_count);
+	updateGuessCount(guesses_allowed - bad_guess_count);
 }
 
 function handleLoad() {
     updateDisplay();
+}
+
+function write_message( message ) {
+    var dom_message_box = document.getElementById("messageBox");
+    dom_message_box.innerHTML = message;
 }
 
 function game_over( message ) {
@@ -70,12 +85,18 @@ function handleKeyPress(event) {
 		if( !saw_blank ) {
 			// Winner!
 			game_over("You Win!");
+			updateDisplay();
+			setImage("img/win.png");
+			return;
 		}
 	} else {
 		// Incorrect guess!
 		bad_guess_count++;
 		if( bad_guess_count >= guesses_allowed ) {
 			game_over("You Lose!");
+			for( var i = 0; i < secret_word.length; i++ ) {
+			    board[i] = secret_word[i];
+			}
 		}
 	}
 
