@@ -14,6 +14,8 @@ function random_choice(n) {
 var guesses_allowed = 6;
 var bad_guess_count = 0;
 
+var keys_seen = [];
+
 var secret_word = word_choices[random_choice(word_choices.length)];
 var board = [];
 for( var i = 0; i < secret_word.length; i++ ) {
@@ -30,6 +32,11 @@ function setImage(image_name) {
 	dom_img.src = image_name;
 }
 
+function updateKeysSeen() {
+    var dom_span = document.getElementById("guessedLetters");
+    dom_span.innerHTML = keys_seen.join(", ");
+}
+
 function updateImage(img_num) {
     setImage("img/" + img_num + ".png");
 }
@@ -40,6 +47,7 @@ function updateGuessCount(n) {
 }
 
 function updateDisplay() {
+    updateKeysSeen();
 	updateBoard();
 	updateImage(bad_guess_count);
 	updateGuessCount(guesses_allowed - bad_guess_count);
@@ -63,6 +71,19 @@ function handleKeyPress(event) {
     var key = event.key ? event.key : String.fromCharCode(event.keyCode);
 	key = key.toLowerCase();
 
+    // Have we seen this key before?
+    for( var i = 0; i < keys_seen.length; i++ ) {
+        if( keys_seen[i] === key ) {
+            write_message("You've already guessed that!");
+            return;
+        }
+    }
+    
+    // If we get here, we know it's a new key. Track it!
+    keys_seen.push(key);
+    keys_seen.sort();
+
+    // Check it!
 	var match = false;
 	for( var i = 0; i < secret_word.length; i++ ) {
 		if( secret_word[i] === key ) {
