@@ -65,6 +65,13 @@ function write_message( message ) {
 function game_over( message ) {
 	write_message( message );
 	document.removeEventListener("keypress", handleKeyPress, false);
+	
+	var button = document.createElement("button");
+	button.addEventListener("click", restartGame, false);
+	button.innerHTML = "Play Again?";
+
+	var playAgainDiv = document.getElementById("playAgain");
+	playAgainDiv.appendChild(button);
 }
 
 function handleKeyPress(event) {
@@ -124,6 +131,32 @@ function handleKeyPress(event) {
     updateDisplay();
 }
 
+function restartGame() {
+    // First, hide the restart button
+    var div = document.getElementById("playAgain");
+    div.removeChild( div.children[0] );
+
+    // Reset which word is the secret.
+    secret_word = word_choices[random_choice(word_choices.length)];
+
+    // Reset how many bad guesses have been made.
+    bad_guess_count = 0;
+
+    // Reset the board to all blanks.
+    board = [];
+    for( var i = 0; i < secret_word.length; i++ ) {
+        board.push("_");
+    }
+
+    // Reset what keys have been guessed.
+    keys_seen = [];
+
+    // Update what the user sees.
+    updateDisplay();
+    
+    // Re-bind our keypress handler
+    document.addEventListener("keypress", handleKeyPress, false);
+}
+
 document.addEventListener("DOMContentLoaded", handleLoad, false);
 document.addEventListener("keypress", handleKeyPress, false);
-
